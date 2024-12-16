@@ -134,8 +134,6 @@ int icut_exp(struct icut* c, uint cap) {
       return -1;
     }
 
-    memset(c->data, 0, sizeof(int) * cap);
-
     c->cap = cap;
     c->ctl = true;
 
@@ -149,10 +147,24 @@ int icut_exp(struct icut* c, uint cap) {
     return -1;
   }
 
-  memset(c->data + c->len, 0, sizeof(int) * (cap - c->len));
-
   c->cap  = cap;
   c->data = n;
+
+  return 0;
+}
+
+int icut_dev(struct icut *c, uint len) {
+  if (!c) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (len > c->cap)
+    if (icut_exp(c, len))
+      return -1;
+
+  memset(c->data + c->len, 0, sizeof(int) * (len - c->len));
+  c->len = len;
 
   return 0;
 }
@@ -175,6 +187,11 @@ int icut_add(struct icut* c, int e) {
 int icut_set(struct icut* c, uint i, int e) {
   if (!c || i >= c->len) {
     errno = EINVAL;
+    return -1;
+  }
+
+  if (i >= c->len) {
+    errno = ERANGE;
     return -1;
   }
 
