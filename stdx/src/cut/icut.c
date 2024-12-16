@@ -194,7 +194,23 @@ int icut_get(struct icut* c, uint i, int* e) {
   return 0;
 }
 
-int icut_srt(struct icut* c, icmp cmp) {
+int icut_pub(struct icut* c, int** e) {
+  if (!c || !e) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (!c->data) {
+    errno = ENOMEDIUM;
+    return -1;
+  }
+
+  *e = c->data;
+
+  return 0;
+}
+
+int icut_srt(struct icut*, icmp) {
   // todo: pque sort here
   
   errno = ENOSYS;

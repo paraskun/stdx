@@ -18,6 +18,7 @@ int icut_add(struct icut* c, int e);
 int icut_set(struct icut* c, uint i, int e);
 
 int icut_get(struct icut* c, uint i, int* e);
+int icut_pub(struct icut* c, int** e);
 int icut_srt(struct icut* c, icmp cmp);
 
 uint icut_len(struct icut* c);
