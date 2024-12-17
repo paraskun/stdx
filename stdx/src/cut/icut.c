@@ -1,15 +1,9 @@
 #include <errno.h>
 #include <stdlib.h>
-#include <stdx/cut.h>
+#include <stdx/pque.h>
 #include <string.h>
 
-struct icut {
-  uint cap;
-  uint len;
-  bool ctl;
-
-  int* data;
-};
+#include "../cut.h"
 
 int icut_ini(struct icut** h) {
   if (!h) {
@@ -27,6 +21,8 @@ int icut_ini(struct icut** h) {
   c->cap  = 0;
   c->len  = 0;
   c->ctl  = false;
+  c->cmp  = &iasc;
+  c->anc  = nullptr;
   c->data = nullptr;
 
   *h = c;
@@ -127,15 +123,20 @@ int icut_exp(struct icut* c, uint cap) {
     return 0;
 
   if (!c->data || !c->ctl) {
-    c->data = malloc(sizeof(int) * cap);
+    int* n = malloc(sizeof(int) * cap);
 
-    if (!c->data) {
+    if (!n) {
       errno = ENOMEM;
       return -1;
     }
 
     c->cap = cap;
     c->ctl = true;
+
+    if (c->data)
+      memcpy(n, c->data, c->len);
+
+    c->data = n;
 
     return 0;
   }
@@ -153,7 +154,7 @@ int icut_exp(struct icut* c, uint cap) {
   return 0;
 }
 
-int icut_dev(struct icut *c, uint len) {
+int icut_dev(struct icut* c, uint len) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -165,6 +166,28 @@ int icut_dev(struct icut *c, uint len) {
 
   memset(c->data + c->len, 0, sizeof(int) * (len - c->len));
   c->len = len;
+
+  return 0;
+}
+
+int icut_cmp(struct icut* c, icmp cmp) {
+  if (!c || !cmp) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  c->cmp = cmp;
+
+  return 0;
+}
+
+int icut_anc(struct icut* c, ianc anc) {
+  if (!c || !anc) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  c->anc = anc;
 
   return 0;
 }
@@ -181,6 +204,9 @@ int icut_add(struct icut* c, int e) {
 
   c->data[c->len++] = e;
 
+  if (c->anc)
+    c->anc(e, c->len - 1);
+
   return 0;
 }
 
@@ -196,6 +222,9 @@ int icut_set(struct icut* c, uint i, int e) {
   }
 
   c->data[i] = e;
+
+  if (c->anc)
+    c->anc(e, i);
 
   return 0;
 }
@@ -227,11 +256,16 @@ int icut_pub(struct icut* c, int** e) {
   return 0;
 }
 
-int icut_srt(struct icut*, icmp) {
-  // todo: pque sort here
-  
-  errno = ENOSYS;
-  return -1;
+int icut_srt(struct icut* c) {
+  if (!c) {
+    errno = EINVAL;
+    return -1;
+  }
+
+  if (pque_fix(c))
+    return -1;
+
+  return pque_srt(c);
 }
 
 uint icut_len(struct icut* c) {

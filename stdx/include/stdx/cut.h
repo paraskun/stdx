@@ -1,6 +1,7 @@
 #ifndef STDX_CUT_H
 #define STDX_CUT_H
 
+#include <stdx/anc.h>
 #include <stdx/cmp.h>
 
 struct icut;
@@ -15,12 +16,15 @@ int icut_shr(struct icut* c);
 int icut_exp(struct icut* c, uint cap);
 int icut_dev(struct icut* c, uint len);
 
+int icut_cmp(struct icut* c, icmp cmp);
+int icut_anc(struct icut* c, ianc anc);
+
 int icut_add(struct icut* c, int e);
 int icut_set(struct icut* c, uint i, int e);
 
 int icut_get(struct icut* c, uint i, int* e);
 int icut_pub(struct icut* c, int** e);
-int icut_srt(struct icut* c, icmp cmp);
+int icut_srt(struct icut* c);
 
 uint icut_len(struct icut* c);
 uint icut_cap(struct icut* c);
