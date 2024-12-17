@@ -5,7 +5,7 @@
 static MunitResult test_iini(const MunitParameter[], void*) {
   struct icut *c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
 
   munit_assert_not_null(c);
 
@@ -26,7 +26,7 @@ static MunitResult test_iini(const MunitParameter[], void*) {
 static MunitResult test_iexp(const MunitParameter[], void*) {
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_exp(c, 9));
 
   munit_assert_uint(0, ==, cut_len(c));
@@ -40,7 +40,7 @@ static MunitResult test_iexp(const MunitParameter[], void*) {
 static MunitResult test_idev(const MunitParameter[], void*) {
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_dev(c, 3));
   munit_assert_uint(3, ==, cut_len(c));
   munit_assert_uint(3, ==, cut_cap(c));
@@ -59,7 +59,7 @@ static MunitResult test_idev(const MunitParameter[], void*) {
 static MunitResult test_iadd(const MunitParameter[], void*) {
   struct icut *c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_add(c, 1));
   munit_assert_int(0, ==, cut_add(c, 2));
   munit_assert_int(0, ==, cut_add(c, 3));
@@ -85,7 +85,7 @@ static MunitResult test_iadd(const MunitParameter[], void*) {
 static MunitResult test_ishr(const MunitParameter[], void*) {
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_exp(c, 9));
 
   munit_assert_uint(0, ==, cut_len(c));
@@ -111,7 +111,7 @@ static MunitResult test_ishr(const MunitParameter[], void*) {
 static MunitResult test_iset(const MunitParameter[], void*) {
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_add(c, 1));
   munit_assert_int(0, ==, cut_add(c, 2));
   munit_assert_int(0, ==, cut_add(c, 3));
@@ -131,11 +131,11 @@ static MunitResult test_iset(const MunitParameter[], void*) {
 static MunitResult test_isrt(const MunitParameter[], void*) {
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_add(c, 2));
   munit_assert_int(0, ==, cut_add(c, 1));
   munit_assert_int(0, ==, cut_add(c, 3));
-  munit_assert_int(0, ==, cut_srt(c, &iasc));
+  munit_assert_int(0, ==, cut_srt(c));
 
   int *s;
 
@@ -161,9 +161,9 @@ static MunitResult test_icov_full(const MunitParameter[], void*) {
 
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_cov(c, s, s + 4));
-  munit_assert_int(0, ==, cut_srt(c, &iasc));
+  munit_assert_int(0, ==, cut_srt(c));
   munit_assert_int(0, ==, cut_cls(&c));
 
   munit_assert_int(1, ==, s[0]);
@@ -189,9 +189,9 @@ static MunitResult test_icov_part(const MunitParameter[], void*) {
 
   struct icut* c;
 
-  munit_assert_int(0, ==, cut_ini(&c));
+  munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_cov(c, s + 1, s + 3));
-  munit_assert_int(0, ==, cut_srt(c, &iasc));
+  munit_assert_int(0, ==, cut_srt(c));
   munit_assert_int(0, ==, cut_cls(&c));
 
   munit_assert_int(2, ==, s[0]);

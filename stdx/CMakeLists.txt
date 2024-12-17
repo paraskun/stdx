@@ -1,4 +1,4 @@
-file(GLOB SRC src/**/*.c)
+file(GLOB SRC src/*.c src/*/*.c)
 
 add_library(stdx ${SRC})
 

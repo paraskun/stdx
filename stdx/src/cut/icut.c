@@ -1,11 +1,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <stdx/pque.h>
+#include <stdx/cmp.h>
 #include <string.h>
 
 #include "../cut.h"
 
-int icut_ini(struct icut** h) {
+int icut_new(struct icut** h) {
   if (!h) {
     errno = EINVAL;
     return -1;
