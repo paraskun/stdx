@@ -22,8 +22,11 @@ int ilog_pop(struct ilog* l, int* e);
 
 int ilog_beg(struct ilog* l, int* e);
 int ilog_end(struct ilog* l, int* e);
+int ilog_rst(struct ilog* l);
 int ilog_adv(struct ilog* l, int* e);
 int ilog_dec(struct ilog* l, int* e);
+
+uint ilog_len(struct ilog* l);
 
 #define log_new(X) _Generic((X),  \
     struct ilog**: ilog_new       \
@@ -65,6 +68,10 @@ int ilog_dec(struct ilog* l, int* e);
     struct ilog*: ilog_end          \
     )(X, e)
 
+#define log_rst(X) _Generic((X),  \
+    struct ilog*: ilog_rst        \
+    )(X)
+
 #define log_adv(X, e) _Generic((X), \
     struct ilog*: ilog_adv          \
     )(X, e)
@@ -72,5 +79,9 @@ int ilog_dec(struct ilog* l, int* e);
 #define log_dec(X, e) _Generic((X), \
     struct ilog*: ilog_dec          \
     )(X, e)
+
+#define log_len(X) _Generic((X),  \
+    struct ilog*: ilog_len        \
+    )(X)
 
 #endif  // STDX_LOG_H
