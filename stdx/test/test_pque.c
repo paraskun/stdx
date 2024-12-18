@@ -59,7 +59,6 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
   return MUNIT_OK;
 }
 
-
 static MunitTest itests[] = {
   {"/fix", test_ifix, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
