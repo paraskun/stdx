@@ -19,7 +19,7 @@ int ipque_fixu(struct icut* q, uint i) {
 
   uint p = PQUE_P(i);
 
-  while (i > 0 && q->cmp(q->data[i], q->data[p]) == 1) {
+  while (i > 0 && q->cmp(q->data[i], q->data[p]) == -1) {
     swap(q, p, i);
 
     i = p;
@@ -44,12 +44,12 @@ int ipque_fixd(struct icut* q, uint i) {
   uint r = PQUE_R(i);
   uint m;
 
-  if (l < q->len && q->cmp(q->data[l], q->data[i]) == 1)
+  if (l < q->len && q->cmp(q->data[l], q->data[i]) == -1)
     m = l;
   else
     m = i;
 
-  if (r < q->len && q->cmp(q->data[r], q->data[m]) == 1)
+  if (r < q->len && q->cmp(q->data[r], q->data[m]) == -1)
     m = r;
 
   if (m != i) {
@@ -105,7 +105,10 @@ int ipque_ext(struct icut* q, int* e) {
   swap(q, 0, q->len - 1);
   q->len -= 1;
 
-  return ipque_fixd(q, 0);
+  if (q->len != 0)
+    return ipque_fixd(q, 0);
+
+  return 0;
 }
 
 int ipque_srt(struct icut* q) {

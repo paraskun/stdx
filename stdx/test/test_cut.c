@@ -127,7 +127,6 @@ static MunitResult test_iset(const MunitParameter[], void*) {
   return MUNIT_OK;
 }
 
-[[maybe_unused]]
 static MunitResult test_isrt(const MunitParameter[], void*) {
   struct icut* c;
 
@@ -149,7 +148,6 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
   return MUNIT_OK;
 }
 
-[[maybe_unused]]
 static MunitResult test_icov_full(const MunitParameter[], void*) {
   int *s = malloc(sizeof(int) * 5);
 
@@ -177,7 +175,6 @@ static MunitResult test_icov_full(const MunitParameter[], void*) {
   return MUNIT_OK;
 }
 
-[[maybe_unused]]
 static MunitResult test_icov_part(const MunitParameter[], void*) {
   int *s = malloc(sizeof(int) * 5);
 
@@ -212,6 +209,9 @@ static MunitTest itests[] = {
   {"/add", test_iadd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/shr", test_ishr, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/set", test_iset, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/cov/full", test_icov_full, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/cov/part", test_icov_part, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
