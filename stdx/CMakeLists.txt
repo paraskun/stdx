@@ -3,6 +3,7 @@ file(GLOB SRC src/*.c src/*/*.c)
 add_library(stdx ${SRC})
 
 target_include_directories(stdx PUBLIC include/)
+target_link_directories(stdx PUBLIC include/)
 
 add_executable(test_cut test/test_cut.c)
 add_executable(test_pque test/test_pque.c)
