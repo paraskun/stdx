@@ -14,4 +14,15 @@ struct icut {
   int* data;
 };
 
+struct pcut {
+  uint cap;
+  uint len;
+  bool ctl;
+
+  pcmp cmp;
+  panc anc;
+
+  void** data;
+};
+
 #endif  // STDX_CUT_INT_H

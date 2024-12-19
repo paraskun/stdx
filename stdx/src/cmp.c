@@ -41,3 +41,11 @@ int dasc(double a, double b) {
 int ddsc(double a, double b) {
   DSC(a, b)
 }
+
+int pasc(void* a, void* b) {
+  ASC(a, b)
+}
+
+int pdsc(void* a, void* b) {
+  DSC(a, b)
+}

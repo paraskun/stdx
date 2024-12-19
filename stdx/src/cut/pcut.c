@@ -6,13 +6,13 @@
 
 #include "../cut.h"
 
-int icut_new(struct icut** h) {
+int pcut_new(struct pcut** h) {
   if (!h) {
     errno = EINVAL;
     return -1;
   }
 
-  struct icut* c = malloc(sizeof(struct icut));
+  struct pcut* c = malloc(sizeof(struct pcut));
 
   if (!c) {
     errno = ENOMEM;
@@ -22,7 +22,7 @@ int icut_new(struct icut** h) {
   c->cap  = 0;
   c->len  = 0;
   c->ctl  = false;
-  c->cmp  = &iasc;
+  c->cmp  = &pasc;
   c->anc  = nullptr;
   c->data = nullptr;
 
@@ -31,13 +31,13 @@ int icut_new(struct icut** h) {
   return 0;
 }
 
-int icut_cls(struct icut** h) {
+int pcut_cls(struct pcut** h) {
   if (!h || !(*h)) {
     errno = EINVAL;
     return -1;
   }
 
-  struct icut* c = *h;
+  struct pcut* c = *h;
 
   if (c->data && c->ctl)
     free(c->data);
@@ -48,7 +48,7 @@ int icut_cls(struct icut** h) {
   return 0;
 }
 
-int icut_cov(struct icut* c, int* beg, int* end) {
+int pcut_cov(struct pcut* c, void** beg, void** end) {
   if (!c || !beg || !end) {
     errno = EINVAL;
     return -1;
@@ -65,7 +65,7 @@ int icut_cov(struct icut* c, int* beg, int* end) {
   return 0;
 }
 
-int icut_mov(struct icut* c, int* s, uint len) {
+int pcut_mov(struct pcut* c, void** s, uint len) {
   if (!c || !s) {
     errno = EINVAL;
     return -1;
@@ -82,7 +82,7 @@ int icut_mov(struct icut* c, int* s, uint len) {
   return 0;
 }
 
-int icut_shr(struct icut* c) {
+int pcut_shr(struct pcut* c) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -101,7 +101,7 @@ int icut_shr(struct icut* c) {
     return 0;
   }
 
-  int* n = realloc(c->data, sizeof(int) * c->len);
+  void** n = realloc(c->data, sizeof(void*) * c->len);
 
   if (!n) {
     errno = ENOMEM;
@@ -114,7 +114,7 @@ int icut_shr(struct icut* c) {
   return 0;
 }
 
-int icut_exp(struct icut* c, uint cap) {
+int pcut_exp(struct pcut* c, uint cap) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -124,7 +124,7 @@ int icut_exp(struct icut* c, uint cap) {
     return 0;
 
   if (!c->data || !c->ctl) {
-    int* n = malloc(sizeof(int) * cap);
+    void** n = malloc(sizeof(void*) * cap);
 
     if (!n) {
       errno = ENOMEM;
@@ -135,14 +135,14 @@ int icut_exp(struct icut* c, uint cap) {
     c->ctl = true;
 
     if (c->data)
-      memcpy(n, c->data, sizeof(int) * c->len);
+      memcpy(n, c->data, sizeof(void*) * c->len);
 
     c->data = n;
 
     return 0;
   }
 
-  int* n = realloc(c->data, sizeof(int) * cap);
+  void** n = realloc(c->data, sizeof(void*) * cap);
 
   if (!n) {
     errno = ENOMEM;
@@ -155,23 +155,23 @@ int icut_exp(struct icut* c, uint cap) {
   return 0;
 }
 
-int icut_dev(struct icut* c, uint len) {
+int pcut_dev(struct pcut* c, uint len) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
   if (len > c->cap)
-    if (icut_exp(c, len))
+    if (pcut_exp(c, len))
       return -1;
 
-  memset(c->data + c->len, 0, sizeof(int) * (len - c->len));
+  memset(c->data + c->len, 0, sizeof(void*) * (len - c->len));
   c->len = len;
 
   return 0;
 }
 
-int icut_cmp(struct icut* c, icmp cmp) {
+int pcut_cmp(struct pcut* c, pcmp cmp) {
   if (!c || !cmp) {
     errno = EINVAL;
     return -1;
@@ -182,7 +182,7 @@ int icut_cmp(struct icut* c, icmp cmp) {
   return 0;
 }
 
-int icut_anc(struct icut* c, ianc anc) {
+int pcut_anc(struct pcut* c, panc anc) {
   if (!c || !anc) {
     errno = EINVAL;
     return -1;
@@ -193,14 +193,14 @@ int icut_anc(struct icut* c, ianc anc) {
   return 0;
 }
 
-int icut_add(struct icut* c, int e) {
+int pcut_add(struct pcut* c, void* e) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
   if (c->len == c->cap)
-    if (icut_exp(c, (c->cap + 1) * 2))
+    if (pcut_exp(c, (c->cap + 1) * 2))
       return -1;
 
   c->data[c->len++] = e;
@@ -211,7 +211,7 @@ int icut_add(struct icut* c, int e) {
   return 0;
 }
 
-int icut_set(struct icut* c, uint i, int e) {
+int pcut_set(struct pcut* c, uint i, void* e) {
   if (!c || i >= c->len) {
     errno = EINVAL;
     return -1;
@@ -230,7 +230,7 @@ int icut_set(struct icut* c, uint i, int e) {
   return 0;
 }
 
-int icut_get(struct icut* c, uint i, int* e) {
+int pcut_get(struct pcut* c, uint i, void** e) {
   if (!c || !e || i >= c->len) {
     errno = EINVAL;
     return -1;
@@ -241,7 +241,7 @@ int icut_get(struct icut* c, uint i, int* e) {
   return 0;
 }
 
-int icut_pub(struct icut* c, int** e) {
+int pcut_pub(struct pcut* c, void*** e) {
   if (!c || !e) {
     errno = EINVAL;
     return -1;
@@ -257,7 +257,7 @@ int icut_pub(struct icut* c, int** e) {
   return 0;
 }
 
-int icut_srt(struct icut* c) {
+int pcut_srt(struct pcut* c) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -269,7 +269,7 @@ int icut_srt(struct icut* c) {
   return pque_srt(c);
 }
 
-uint icut_len(struct icut* c) {
+uint pcut_len(struct pcut* c) {
   if (!c) {
     errno = EINVAL;
     return 0;
@@ -278,7 +278,7 @@ uint icut_len(struct icut* c) {
   return c->len;
 }
 
-uint icut_cap(struct icut* c) {
+uint pcut_cap(struct pcut* c) {
   if (!c) {
     errno = EINVAL;
     return 0;

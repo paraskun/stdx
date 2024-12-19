@@ -29,60 +29,99 @@ int icut_srt(struct icut* c);
 uint icut_len(struct icut* c);
 uint icut_cap(struct icut* c);
 
+struct pcut;
+
+int pcut_new(struct pcut** h);
+int pcut_cls(struct pcut** h);
+
+int pcut_cov(struct pcut* c, void** beg, void** end);
+int pcut_mov(struct pcut* c, void** s, uint len);
+
+int pcut_shr(struct pcut* c);
+int pcut_exp(struct pcut* c, uint cap);
+int pcut_dev(struct pcut* c, uint len);
+
+int pcut_cmp(struct pcut* c, pcmp cmp);
+int pcut_anc(struct pcut* c, panc anc);
+
+int pcut_add(struct pcut* c, void* e);
+int pcut_set(struct pcut* c, uint i, void* e);
+
+int pcut_get(struct pcut* c, uint i, void** e);
+int pcut_pub(struct pcut* c, void*** e);
+int pcut_srt(struct pcut* c);
+
+uint pcut_len(struct pcut* c);
+uint pcut_cap(struct pcut* c);
+
 #define cut_new(X) _Generic((X),  \
-    struct icut**: icut_new       \
+    struct icut**: icut_new,      \
+    struct pcut**: pcut_new       \
     )(X)
 
 #define cut_cls(X) _Generic((X),  \
-    struct icut**: icut_cls       \
+    struct icut**: icut_cls,      \
+    struct pcut**: pcut_cls       \
     )(X)
 
 #define cut_cov(X, b, e) _Generic((X),  \
-    struct icut*: icut_cov              \
+    struct icut*: icut_cov,             \
+    struct pcut*: pcut_cov              \
     )(X, b, e)
 
 #define cut_mov(X, s, l) _Generic((X),  \
-    struct icut*: icut_mov              \
+    struct icut*: icut_mov,             \
+    struct pcut*: pcut_mov              \
     )(X, s, l)
 
 #define cut_shr(X) _Generic((X),  \
-    struct icut*: icut_shr        \
+    struct icut*: icut_shr,       \
+    struct pcut*: pcut_shr        \
     )(X)
 
 #define cut_exp(X, c) _Generic((X), \
-    struct icut*: icut_exp          \
+    struct icut*: icut_exp,         \
+    struct pcut*: pcut_exp          \
     )(X, c)
 
 #define cut_dev(X, l) _Generic((X), \
-    struct icut*: icut_dev          \
+    struct icut*: icut_dev,         \
+    struct pcut*: pcut_dev          \
     )(X, l)
 
 #define cut_add(X, e) _Generic((X), \
-    struct icut*: icut_add          \
+    struct icut*: icut_add,         \
+    struct pcut*: pcut_add          \
     )(X, e)
 
 #define cut_set(X, i, e) _Generic((X),  \
-    struct icut*: icut_set              \
+    struct icut*: icut_set,             \
+    struct pcut*: pcut_set              \
     )(X, i, e)
 
 #define cut_get(X, i, e) _Generic((X),  \
-    struct icut*: icut_get              \
+    struct icut*: icut_get,             \
+    struct pcut*: pcut_get              \
     )(X, i, e)
 
 #define cut_pub(X, e) _Generic((X), \
-    struct icut*: icut_pub          \
+    struct icut*: icut_pub,         \
+    struct pcut*: pcut_pub          \
     )(X, e)
 
 #define cut_srt(X) _Generic((X),  \
-    struct icut*: icut_srt        \
+    struct icut*: icut_srt,       \
+    struct pcut*: pcut_srt        \
     )(X)
 
 #define cut_len(X) _Generic((X),  \
-    struct icut*: icut_len        \
+    struct icut*: icut_len,       \
+    struct pcut*: pcut_len        \
     )(X)
 
 #define cut_cap(X) _Generic((X),  \
-    struct icut*: icut_cap        \
+    struct icut*: icut_cap,       \
+    struct pcut*: pcut_cap        \
     )(X)
 
 #endif  // STDX_CUT_H

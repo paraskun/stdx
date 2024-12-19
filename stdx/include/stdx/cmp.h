@@ -21,4 +21,7 @@ int fdsc(float, float);
 int dasc(double, double);
 int ddsc(double, double);
 
+int pasc(void*, void*);
+int pdsc(void*, void*);
+
 #endif  // STDX_CMP_H
