@@ -89,6 +89,16 @@ uint pcut_cap(struct pcut* c);
     struct pcut*: pcut_dev          \
     )(X, l)
 
+#define cut_cmp(X, c) _Generic((X), \
+    struct icut*: icut_cmp,         \
+    struct pcut*: pcut_cmp          \
+    )(X, c)
+
+#define cut_anc(X, a) _Generic((X), \
+    struct icut*: icut_anc,         \
+    struct pcut*: pcut_anc          \
+    )(X, a)
+
 #define cut_add(X, e) _Generic((X), \
     struct icut*: icut_add,         \
     struct pcut*: pcut_add          \
