@@ -4,14 +4,14 @@
 #include "../cut.h"
 #include "../pque.h"
 
-static inline void swap(struct icut* c, uint a, uint b) {
-  int t = c->data[a];
+static inline void swap(struct pcut* c, uint a, uint b) {
+  void* t = c->data[a];
 
   c->data[a] = c->data[b];
   c->data[b] = t;
 }
 
-int ipque_fixu(struct icut* q, uint i) {
+int ppque_fixu(struct pcut* q, uint i) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -29,7 +29,7 @@ int ipque_fixu(struct icut* q, uint i) {
   return 0;
 }
 
-int ipque_fixd(struct icut* q, uint i) {
+int ppque_fixd(struct pcut* q, uint i) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -55,20 +55,20 @@ int ipque_fixd(struct icut* q, uint i) {
   if (m != i) {
     swap(q, m, i);
 
-    return ipque_fixd(q, m);
+    return ppque_fixd(q, m);
   }
 
   return 0;
 }
 
-int ipque_fix(struct icut* q) {
+int ppque_fix(struct pcut* q) {
   if (!q) {
     errno = EINVAL;
     return -1;
   }
 
   for (uint i = q->len / 2 - 1;; --i) {
-    if (ipque_fixd(q, i))
+    if (ppque_fixd(q, i))
       return -1;
 
     if (i == 0)
@@ -78,19 +78,19 @@ int ipque_fix(struct icut* q) {
   return 0;
 }
 
-int ipque_add(struct icut* q, int e) {
+int ppque_add(struct pcut* q, void* e) {
   if (!q) {
     errno = EINVAL;
     return -1;
   }
 
-  if (icut_add(q, e))
+  if (pcut_add(q, e))
     return -1;
 
-  return ipque_fixu(q, q->len - 1);
+  return ppque_fixu(q, q->len - 1);
 }
 
-int ipque_ext(struct icut* q, int* e) {
+int ppque_ext(struct pcut* q, void** e) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -106,12 +106,12 @@ int ipque_ext(struct icut* q, int* e) {
   q->len -= 1;
 
   if (q->len != 0)
-    return ipque_fixd(q, 0);
+    return ppque_fixd(q, 0);
 
   return 0;
 }
 
-int ipque_srt(struct icut* q) {
+int ppque_srt(struct pcut* q) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -123,7 +123,7 @@ int ipque_srt(struct icut* q) {
   for (uint i = q->len - 1; i > 0; --i) {
     swap(q, 0, i);
     q->len -= 1;
-    ipque_fixd(q, 0);
+    ppque_fixd(q, 0);
   }
 
   return 0;

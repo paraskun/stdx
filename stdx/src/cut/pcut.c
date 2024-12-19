@@ -1,7 +1,6 @@
 #include <errno.h>
 #include <stdlib.h>
-#include <stdx/pque.h>
-#include <stdx/cmp.h>
+#include <stdx.h>
 #include <string.h>
 
 #include "../cut.h"
@@ -19,11 +18,11 @@ int pcut_new(struct pcut** h) {
     return -1;
   }
 
-  c->cap  = 0;
-  c->len  = 0;
-  c->ctl  = false;
-  c->cmp  = &pasc;
-  c->anc  = nullptr;
+  c->cap = 0;
+  c->len = 0;
+  c->ctl = false;
+  c->cmp = &pasc;
+  c->anc = nullptr;
   c->data = nullptr;
 
   *h = c;
@@ -57,9 +56,9 @@ int pcut_cov(struct pcut* c, void** beg, void** end) {
   if (c->data && c->ctl)
     free(c->data);
 
-  c->ctl  = false;
-  c->cap  = end - beg + 1;
-  c->len  = c->cap;
+  c->ctl = false;
+  c->cap = end - beg + 1;
+  c->len = c->cap;
   c->data = beg;
 
   return 0;
@@ -74,9 +73,9 @@ int pcut_mov(struct pcut* c, void** s, uint len) {
   if (c->data && c->ctl)
     free(c->data);
 
-  c->ctl  = true;
-  c->cap  = len;
-  c->len  = len;
+  c->ctl = true;
+  c->cap = len;
+  c->len = len;
   c->data = s;
 
   return 0;
@@ -94,8 +93,8 @@ int pcut_shr(struct pcut* c) {
   if (c->len == 0) {
     free(c->data);
 
-    c->cap  = 0;
-    c->ctl  = false;
+    c->cap = 0;
+    c->ctl = false;
     c->data = nullptr;
 
     return 0;
@@ -108,7 +107,7 @@ int pcut_shr(struct pcut* c) {
     return -1;
   }
 
-  c->cap  = c->len;
+  c->cap = c->len;
   c->data = n;
 
   return 0;
@@ -149,7 +148,7 @@ int pcut_exp(struct pcut* c, uint cap) {
     return -1;
   }
 
-  c->cap  = cap;
+  c->cap = cap;
   c->data = n;
 
   return 0;
