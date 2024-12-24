@@ -1,11 +1,11 @@
 #ifndef STDX_FUN_H
 #define STDX_FUN_H
 
-struct fun {
+struct clsr {
   void* ctx;
   void (*call)(void*);
 };
 
-#define fun(X, Y) (struct fun){.ctx = &X, .call = (void (*)(void*))&Y}
+#define clsr(X, Y) (struct clsr){.ctx = &X, .call = (void (*)(void*))&Y}
 
 #endif  // STDX_FUN_H
