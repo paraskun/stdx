@@ -6,7 +6,7 @@
 
 struct icut;
 
-int icut_new(struct icut** h);
+int icut_new(struct icut** h, uint n, ...);
 int icut_cls(struct icut** h);
 
 int icut_cov(struct icut* c, int* beg, int* end);
@@ -31,7 +31,7 @@ uint icut_cap(struct icut* c);
 
 struct pcut;
 
-int pcut_new(struct pcut** h);
+int pcut_new(struct pcut** h, uint n, ...);
 int pcut_cls(struct pcut** h);
 
 int pcut_cov(struct pcut* c, void** beg, void** end);
@@ -54,10 +54,15 @@ int pcut_srt(struct pcut* c);
 uint pcut_len(struct pcut* c);
 uint pcut_cap(struct pcut* c);
 
-#define cut_new(X) _Generic((X),  \
-    struct icut**: icut_new,      \
-    struct pcut**: pcut_new       \
-    )(X)
+#define ZERO_DEFAULT_ZERO(F, _0, _1, ...) F(_0, _1, __VA_ARGS__)
+#define ZERO_DEFAULT(...) ZERO_DEFAULT_ZERO(__VA_ARGS__, 0, 0)
+
+#define cut_new(...) ZERO_DEFAULT(cut_new_exp, __VA_ARGS__)
+
+#define cut_new_exp(X, n, ...) _Generic((X),  \
+    struct icut**: icut_new,              \
+    struct pcut**: pcut_new               \
+    )(X, n, __VA_ARGS__)
 
 #define cut_cls(X) _Generic((X),  \
     struct icut**: icut_cls,      \

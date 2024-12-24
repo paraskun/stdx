@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <stdx.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include "../cut.h"
 
-int pcut_new(struct pcut** h) {
+int pcut_new(struct pcut** h, uint n, ...) {
   if (!h) {
     errno = EINVAL;
     return -1;
@@ -26,6 +27,19 @@ int pcut_new(struct pcut** h) {
   c->data = nullptr;
 
   *h = c;
+
+  if (n == 0)
+    return 0;
+
+  pcut_exp(c, n);
+
+  va_list arg;
+  va_start(arg, n);
+
+  for (uint i = 0; i < n; ++i)
+    pcut_add(c, va_arg(arg, void*));
+
+  va_end(arg);
 
   return 0;
 }

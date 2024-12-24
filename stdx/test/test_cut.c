@@ -1,9 +1,9 @@
-#include <munit.h>
 #include <errno.h>
+#include <munit.h>
 #include <stdx/cut.h>
 
 static MunitResult test_iini(const MunitParameter[], void*) {
-  struct icut *c;
+  struct icut* c;
 
   munit_assert_int(0, ==, cut_new(&c));
 
@@ -19,7 +19,24 @@ static MunitResult test_iini(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_cls(&c));
 
   munit_assert_null(c);
-  
+
+  return MUNIT_OK;
+}
+
+static MunitResult test_idef(const MunitParameter[], void*) {
+  struct icut* c;
+
+  munit_assert_int(0, ==, cut_new(&c, 3, 1, 2, 3));
+
+  int* pc;
+
+  munit_assert_int(0, ==, cut_pub(c, &pc));
+  munit_assert_int(1, ==, pc[0]);
+  munit_assert_int(2, ==, pc[1]);
+  munit_assert_int(3, ==, pc[2]);
+
+  munit_assert_int(0, ==, cut_cls(&c));
+
   return MUNIT_OK;
 }
 
@@ -57,7 +74,7 @@ static MunitResult test_idev(const MunitParameter[], void*) {
 }
 
 static MunitResult test_iadd(const MunitParameter[], void*) {
-  struct icut *c;
+  struct icut* c;
 
   munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_add(c, 1));
@@ -120,7 +137,7 @@ static MunitResult test_iset(const MunitParameter[], void*) {
   int e;
 
   munit_assert_int(0, ==, cut_get(c, 1, &e));
-  munit_assert_int(9, ==, e); 
+  munit_assert_int(9, ==, e);
 
   munit_assert_int(0, ==, cut_cls(&c));
 
@@ -136,7 +153,7 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_add(c, 3));
   munit_assert_int(0, ==, cut_srt(c));
 
-  int *s;
+  int* s;
 
   munit_assert_int(0, ==, cut_pub(c, &s));
   munit_assert_int(1, ==, s[0]);
@@ -149,7 +166,7 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
 }
 
 static MunitResult test_icov_full(const MunitParameter[], void*) {
-  int *s = malloc(sizeof(int) * 5);
+  int* s = malloc(sizeof(int) * 5);
 
   s[0] = 2;
   s[1] = 1;
@@ -176,7 +193,7 @@ static MunitResult test_icov_full(const MunitParameter[], void*) {
 }
 
 static MunitResult test_icov_part(const MunitParameter[], void*) {
-  int *s = malloc(sizeof(int) * 5);
+  int* s = malloc(sizeof(int) * 5);
 
   s[0] = 2;
   s[1] = 1;
@@ -204,8 +221,9 @@ static MunitResult test_icov_part(const MunitParameter[], void*) {
 
 static MunitTest itests[] = {
   {"/ini", test_iini, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/ini", test_iexp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/ini", test_idev, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/def", test_idef, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/exp", test_iexp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+  {"/dev", test_idev, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/add", test_iadd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/shr", test_ishr, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
   {"/set", test_iset, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
@@ -220,8 +238,8 @@ static MunitSuite suites[] = {
   {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
 };
 
-static const MunitSuite suite = { "cut", NULL, suites, 1, MUNIT_SUITE_OPTION_NONE };
+static const MunitSuite suite = {"cut", NULL, suites, 1, MUNIT_SUITE_OPTION_NONE};
 
 int main(int argc, char** argv) {
-  return munit_suite_main(&suite, NULL, argc, argv); 
+  return munit_suite_main(&suite, NULL, argc, argv);
 }

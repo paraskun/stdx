@@ -1,11 +1,12 @@
 #include <errno.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <stdx.h>
 #include <string.h>
 
 #include "../cut.h"
 
-int icut_new(struct icut** h) {
+int icut_new(struct icut** h, uint n, ...) {
   if (!h) {
     errno = EINVAL;
     return -1;
@@ -26,6 +27,19 @@ int icut_new(struct icut** h) {
   c->data = nullptr;
 
   *h = c;
+
+  if (n == 0)
+    return 0;
+
+  icut_exp(c, n);
+
+  va_list arg;
+  va_start(arg, n);
+  
+  for (uint i = 0; i < n; ++i)
+    icut_add(c, va_arg(arg, int));
+
+  va_end(arg);
 
   return 0;
 }
