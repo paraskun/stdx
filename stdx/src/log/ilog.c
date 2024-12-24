@@ -1,28 +1,9 @@
 #include <errno.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <stdx/log.h>
 
-struct irec {
-  int e;
-
-  struct irec* next;
-  struct irec* prev;
-};
-
-struct ilog {
-  uint len;
-  bool srt;
-  bool dup;
-
-  icmp cmp;
-
-  struct irec* beg;
-  struct irec* end;
-
-  struct irec* itr;
-};
-
-int ilog_new(struct ilog** h) {
+int ilog_new(struct ilog** h, uint n, ...) {
   if (!h) {
     errno = EINVAL;
     return -1;
@@ -37,13 +18,25 @@ int ilog_new(struct ilog** h) {
 
   l->len = 0;
   l->srt = false;
-  l->dup = false;
-  l->cmp = &iasc;
+  l->dup = true;
+  l->cmp.call = &iasc;
+  l->cmp.ctx = nullptr;
   l->beg = nullptr;
   l->end = nullptr;
   l->itr = nullptr;
 
   *h = l;
+
+  if (n == 0)
+    return 0;
+
+  va_list arg;
+  va_start(arg, n);
+
+  for (uint i = 0; i < n; ++i)
+    ilog_add(l, va_arg(arg, int));
+
+  va_end(arg);
 
   return 0;
 }
@@ -71,39 +64,6 @@ int ilog_cls(struct ilog** h) {
   return 0;
 }
 
-int ilog_cmp(struct ilog* l, icmp cmp) {
-  if (!l || !cmp) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  l->cmp = cmp;
-
-  return 0;
-}
-
-int ilog_srt(struct ilog* l, bool srt) {
-  if (!l) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  l->srt = srt;
-
-  return 0;
-}
-
-int ilog_dup(struct ilog* l, bool dup) {
-  if (!l) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  l->dup = dup;
-
-  return 0;
-}
-
 int ilog_add(struct ilog* l, int e) {
   if (!l) {
     errno = EINVAL;
@@ -114,7 +74,7 @@ int ilog_add(struct ilog* l, int e) {
 
   if (l->srt || !l->dup)
     for (int i; ilog_adv(l, &i);) {
-      int c = l->cmp(i, e);
+      int c = l->cmp.call(l->cmp.ctx, 2, i, e);
 
       if (c == 0 && !l->dup) {
         errno = EALREADY;

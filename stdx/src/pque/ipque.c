@@ -1,14 +1,13 @@
 #include <errno.h>
-#include <stdx.h>
+#include <stdx/cut.h>
 
-#include "../cut.h"
-#include "../pque.h"
+#include "pque.h"
 
 static inline void swap(struct icut* c, uint a, uint b) {
-  int t = c->data[a];
+  int t = c->dat[a];
 
-  c->data[a] = c->data[b];
-  c->data[b] = t;
+  c->dat[a] = c->dat[b];
+  c->dat[b] = t;
 }
 
 int ipque_fixu(struct icut* q, uint i) {
@@ -19,7 +18,7 @@ int ipque_fixu(struct icut* q, uint i) {
 
   uint p = PQUE_P(i);
 
-  while (i > 0 && q->cmp(q->data[i], q->data[p]) == -1) {
+  while (i > 0 && q->cmp.call(q->cmp.ctx, 2, q->dat[i], q->dat[p]) == -1) {
     swap(q, p, i);
 
     i = p;
@@ -44,12 +43,12 @@ int ipque_fixd(struct icut* q, uint i) {
   uint r = PQUE_R(i);
   uint m;
 
-  if (l < q->len && q->cmp(q->data[l], q->data[i]) == -1)
+  if (l < q->len && q->cmp.call(q->cmp.ctx, 2, q->dat[l], q->dat[i]) == -1)
     m = l;
   else
     m = i;
 
-  if (r < q->len && q->cmp(q->data[r], q->data[m]) == -1)
+  if (r < q->len && q->cmp.call(q->cmp.ctx, 2, q->dat[r], q->dat[m]) == -1)
     m = r;
 
   if (m != i) {
@@ -101,7 +100,7 @@ int ipque_ext(struct icut* q, int* e) {
     return -1;
   }
 
-  *e = q->data[0];
+  *e = q->dat[0];
   swap(q, 0, q->len - 1);
   q->len -= 1;
 

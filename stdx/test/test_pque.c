@@ -43,16 +43,14 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_add(c, 1));
   munit_assert_int(0, ==, cut_add(c, 4));
 
-  int *e;
-
   munit_assert_int(0, ==, pque_fix(c));
   munit_assert_int(0, ==, pque_srt(c));
-  munit_assert_int(0, ==, cut_pub(c, &e));
-  munit_assert_int(1, ==, e[0]);
-  munit_assert_int(2, ==, e[1]);
-  munit_assert_int(3, ==, e[2]);
-  munit_assert_int(4, ==, e[3]);
-  munit_assert_int(5, ==, e[4]);
+
+  munit_assert_int(1, ==, c->dat[0]);
+  munit_assert_int(2, ==, c->dat[1]);
+  munit_assert_int(3, ==, c->dat[2]);
+  munit_assert_int(4, ==, c->dat[3]);
+  munit_assert_int(5, ==, c->dat[4]);
 
   munit_assert_int(0, ==, cut_cls(&c));
   
