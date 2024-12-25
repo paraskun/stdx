@@ -119,11 +119,15 @@ int ppque_srt(struct pcut* q) {
   if (q->len == 0)
     return 0;
 
+  uint len = q->len;
+
   for (uint i = q->len - 1; i > 0; --i) {
     swap(q, 0, i);
     q->len -= 1;
     ppque_fixd(q, 0);
   }
+
+  q->len = len;
 
   return 0;
 }

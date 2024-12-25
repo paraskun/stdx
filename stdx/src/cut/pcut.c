@@ -222,8 +222,8 @@ int pcut_srt(struct pcut* c) {
     return -1;
   }
 
-  if (pque_fix(c))
+  if (ppque_fix(c))
     return -1;
 
-  return pque_srt(c);
+  return ppque_srt(c);
 }

@@ -209,8 +209,8 @@ int icut_srt(struct icut* c) {
     return -1;
   }
 
-  if (pque_fix(c))
+  if (ipque_fix(c))
     return -1;
 
-  return pque_srt(c);
+  return ipque_srt(c);
 }
