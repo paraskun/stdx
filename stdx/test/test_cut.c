@@ -131,6 +131,7 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
   munit_assert_int(1, ==, c->dat[0]);
   munit_assert_int(2, ==, c->dat[1]);
   munit_assert_int(3, ==, c->dat[2]);
+  munit_assert_int(3, ==, c->len);
 
   munit_assert_int(0, ==, cut_cls(&c));
 
