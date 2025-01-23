@@ -1,5 +1,5 @@
-#ifndef STDX_FUN_H
-#define STDX_FUN_H
+#ifndef STDX_CAP_H
+#define STDX_CAP_H
 
 typedef unsigned int uint;
 
@@ -37,4 +37,4 @@ int ddsc(void*, uint, ...);
 int pasc(void*, uint, ...);
 int pdsc(void*, uint, ...);
 
-#endif  // STDX_FUN_H
+#endif  // STDX_CAP_H

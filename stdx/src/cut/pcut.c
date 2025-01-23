@@ -5,16 +5,9 @@
 #include <stdx/pque.h>
 #include <string.h>
 
-int pcut_new(struct pcut** h, uint n, ...) {
-  if (!h) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  struct pcut* c = malloc(sizeof(struct pcut));
-
+int pcut_new(struct pcut* c, uint n, ...) {
   if (!c) {
-    errno = ENOMEM;
+    errno = EINVAL;
     return -1;
   }
 
@@ -27,8 +20,6 @@ int pcut_new(struct pcut** h, uint n, ...) {
   c->anc.call = nullptr;
   c->anc.ctx = nullptr;
   c->dat = nullptr;
-
-  *h = c;
 
   if (n == 0)
     return 0;
@@ -46,13 +37,11 @@ int pcut_new(struct pcut** h, uint n, ...) {
   return 0;
 }
 
-int pcut_cls(struct pcut** h) {
-  if (!h || !(*h)) {
+int pcut_cls(struct pcut* c) {
+  if (!c) {
     errno = EINVAL;
     return -1;
   }
-
-  struct pcut* c = *h;
 
   if (c->dat) {
     if (c->ctl)
@@ -62,9 +51,6 @@ int pcut_cls(struct pcut** h) {
     if (c->own)
       free(c->dat);
   }
-
-  free(c);
-  *h = nullptr;
 
   return 0;
 }

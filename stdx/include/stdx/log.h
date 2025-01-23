@@ -27,8 +27,8 @@ struct ilog {
   struct irec* itr;
 };
 
-int ilog_new(struct ilog** h, uint n, ...);
-int ilog_cls(struct ilog** h);
+int ilog_new(struct ilog* l, uint n, ...);
+int ilog_cls(struct ilog* l);
 
 int ilog_add(struct ilog* l, int e);
 int ilog_ins(struct ilog* l, int e, int d);
@@ -42,12 +42,12 @@ int ilog_dec(struct ilog* l, int* e);
 
 #define log_new(...) log_new_var(__VA_ARGS__, 0, 0)
 
-#define log_new_var(X, n, ...) _Generic((X),  \
-    struct ilog**: ilog_new,                  \
+#define log_new_var(X, n, ...) _Generic((X), \
+    struct ilog*: ilog_new,                  \
     )(X, n, __VA_ARGS__)
 
-#define log_cls(X) _Generic((X),  \
-    struct ilog**: ilog_cls       \
+#define log_cls(X) _Generic((X), \
+    struct ilog*: ilog_cls       \
     )(X)
 
 #define log_add(X, e) _Generic((X), \

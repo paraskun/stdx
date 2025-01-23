@@ -3,16 +3,9 @@
 #include <stdarg.h>
 #include <stdx/log.h>
 
-int ilog_new(struct ilog** h, uint n, ...) {
-  if (!h) {
-    errno = EINVAL;
-    return -1;
-  }
-
-  struct ilog* l = malloc(sizeof(struct ilog));
-
+int ilog_new(struct ilog* l, uint n, ...) {
   if (!l) {
-    errno = ENOMEM;
+    errno = EINVAL;
     return -1;
   }
 
@@ -24,8 +17,6 @@ int ilog_new(struct ilog** h, uint n, ...) {
   l->beg = nullptr;
   l->end = nullptr;
   l->itr = nullptr;
-
-  *h = l;
 
   if (n == 0)
     return 0;
@@ -41,13 +32,12 @@ int ilog_new(struct ilog** h, uint n, ...) {
   return 0;
 }
 
-int ilog_cls(struct ilog** h) {
-  if (!h || !(*h)) {
+int ilog_cls(struct ilog* l) {
+  if (!l) {
     errno = EINVAL;
     return -1;
   }
 
-  struct ilog* l = *h;
   struct irec* r = l->beg;
   struct irec* t;
 
@@ -57,9 +47,6 @@ int ilog_cls(struct ilog** h) {
 
     free(t);
   }
-
-  free(l);
-  *h = nullptr;
 
   return 0;
 }

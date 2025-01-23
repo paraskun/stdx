@@ -1,11 +1,11 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include <stdx/cut.h>
+#include <stdx/cap.h>
 #include <stdx/pque.h>
 #include <string.h>
 
-int icut_new(struct icut* c, uint n, ...) {
+int dcut_new(struct dcut* c, uint n, ...) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -14,7 +14,7 @@ int icut_new(struct icut* c, uint n, ...) {
   c->cap = 0;
   c->len = 0;
   c->own = false;
-  c->cmp.call = &iasc;
+  c->cmp.call = &dasc;
   c->cmp.ctx = nullptr;
   c->anc.call = nullptr;
   c->anc.ctx = nullptr;
@@ -23,32 +23,33 @@ int icut_new(struct icut* c, uint n, ...) {
   if (n == 0)
     return 0;
 
-  icut_exp(c, n);
+  dcut_exp(c, n);
 
   va_list arg;
   va_start(arg, n);
 
   for (uint i = 0; i < n; ++i)
-    icut_add(c, va_arg(arg, int));
+    dcut_add(c, va_arg(arg, double));
 
   va_end(arg);
 
   return 0;
 }
 
-int icut_cls(struct icut* c) {
+int dcut_cls(struct dcut* c) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
-  if (c->dat && c->own)
-    free(c->dat);
+  if (c->dat)
+    if (c->own)
+      free(c->dat);
 
   return 0;
 }
 
-int icut_cov(struct icut* c, int* s, uint len) {
+int dcut_cov(struct dcut* c, double* s, uint len) {
   if (!c || !s || len == 0) {
     errno = EINVAL;
     return -1;
@@ -65,14 +66,15 @@ int icut_cov(struct icut* c, int* s, uint len) {
   return 0;
 }
 
-int icut_mov(struct icut* c, int* s, uint len) {
+int dcut_mov(struct dcut* c, double* s, uint len) {
   if (!c || !s) {
     errno = EINVAL;
     return -1;
   }
 
-  if (c->dat && c->own)
-    free(c->dat);
+  if (c->dat)
+    if (c->own)
+      free(c->dat);
 
   c->own = true;
   c->cap = len;
@@ -82,7 +84,7 @@ int icut_mov(struct icut* c, int* s, uint len) {
   return 0;
 }
 
-int icut_shr(struct icut* c) {
+int dcut_shr(struct dcut* c) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -101,7 +103,7 @@ int icut_shr(struct icut* c) {
     return 0;
   }
 
-  int* n = realloc(c->dat, sizeof(int) * c->len);
+  double* n = realloc(c->dat, sizeof(double) * c->len);
 
   if (!n) {
     errno = ENOMEM;
@@ -114,7 +116,7 @@ int icut_shr(struct icut* c) {
   return 0;
 }
 
-int icut_exp(struct icut* c, uint cap) {
+int dcut_exp(struct dcut* c, uint cap) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -124,7 +126,7 @@ int icut_exp(struct icut* c, uint cap) {
     return 0;
 
   if (!c->dat || !c->own) {
-    int* n = malloc(sizeof(int) * cap);
+    double* n = malloc(sizeof(double) * cap);
 
     if (!n) {
       errno = ENOMEM;
@@ -135,14 +137,14 @@ int icut_exp(struct icut* c, uint cap) {
     c->own = true;
 
     if (c->dat)
-      memcpy(n, c->dat, sizeof(int) * c->len);
+      memcpy(n, c->dat, sizeof(double) * c->len);
 
     c->dat = n;
 
     return 0;
   }
 
-  int* n = realloc(c->dat, sizeof(int) * cap);
+  double* n = realloc(c->dat, sizeof(double) * cap);
 
   if (!n) {
     errno = ENOMEM;
@@ -155,30 +157,30 @@ int icut_exp(struct icut* c, uint cap) {
   return 0;
 }
 
-int icut_dev(struct icut* c, uint len) {
+int dcut_dev(struct dcut* c, uint len) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
   if (len > c->cap)
-    if (icut_exp(c, len))
+    if (dcut_exp(c, len))
       return -1;
 
-  memset(c->dat + c->len, 0, sizeof(int) * (len - c->len));
+  memset(c->dat + c->len, 0, sizeof(double) * (len - c->len));
   c->len = len;
 
   return 0;
 }
 
-int icut_add(struct icut* c, int e) {
+int dcut_add(struct dcut* c, double e) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
   if (c->len == c->cap)
-    if (icut_exp(c, (c->cap + 1) * 2))
+    if (dcut_exp(c, (c->cap + 1) * 2))
       return -1;
 
   c->dat[c->len++] = e;
@@ -189,14 +191,14 @@ int icut_add(struct icut* c, int e) {
   return 0;
 }
 
-int icut_srt(struct icut* c) {
+int dcut_srt(struct dcut* c) {
   if (!c) {
     errno = EINVAL;
     return -1;
   }
 
-  if (ipque_fix(c))
+  if (dpque_fix(c))
     return -1;
 
-  return ipque_srt(c);
+  return dpque_srt(c);
 }
