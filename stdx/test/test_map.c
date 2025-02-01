@@ -1,4 +1,6 @@
 #include <munit.h>
+#include <string.h>
+
 #include <stdx/map.h>
 
 static MunitResult test_siput(const MunitParameter[], void*) {
@@ -7,9 +9,9 @@ static MunitResult test_siput(const MunitParameter[], void*) {
   int v;
 
   munit_assert_int(0, ==, map_new(&m));
-  munit_assert_int(0, ==, map_put(&m, "key", 10));
+  munit_assert_int(1, ==, map_put(&m, "key", 10));
   munit_assert_int(0, ==, map_get(&m, "key", &v));
-  munit_assert_int(0, ==, v);
+  munit_assert_int(10, ==, v);
   munit_assert_int(0, ==, map_cls(&m));
 
   return MUNIT_OK;

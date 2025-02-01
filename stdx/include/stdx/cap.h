@@ -2,6 +2,7 @@
 #define STDX_CAP_H
 
 typedef unsigned int uint;
+typedef const char* str;
 
 struct vcap {
   void (*call)(void*, uint, ...);

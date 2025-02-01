@@ -1,33 +1,34 @@
 #ifndef STDX_MAP_H
 #define STDX_MAP_H
 
-#define STDX_MAP_MAX_LVL 16
-#define STDX_MAP_PBT_NUM 0.5
-
+#include <stdint.h>
 #include <stdx/cap.h>
 
+#define STDX_MAP_LVL_MAX 16
+#define STDX_MAP_LVL_PBT 0.5
+
 struct sirec {
-  const char* k;
+  str k;
   int v;
 
   struct sirec** fwd;
 };
 
 struct simap {
-  uint len;
+  int len;
   int lvl;
 
-  struct icap cmp;
   struct sirec beg;
 };
 
 int simap_new(struct simap* m);
 int simap_cls(struct simap* m);
 
-int simap_get(struct simap* m, const char* k, int* v);
-int simap_put(struct simap* m, const char* k, int v);
-int simap_pop(struct simap* m, const char* k, int* v);
-int simap_del(struct simap* m, const char* k);
+int simap_get(const struct simap* m, str k, int* v);
+
+int simap_put(struct simap* m, str k, int v);
+int simap_pop(struct simap* m, str k, int* v);
+int simap_del(struct simap* m, str k);
 
 #define map_new(X) _Generic((X),  \
     struct simap*: simap_new      \

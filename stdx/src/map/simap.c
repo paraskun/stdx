@@ -7,7 +7,7 @@
 static int gen_lvl() {
   int lvl = 0;
 
-  while ((double)rand() / RAND_MAX < STDX_MAP_PBT_NUM && lvl < STDX_MAP_MAX_LVL)
+  while ((double)rand() / RAND_MAX < STDX_MAP_LVL_PBT && lvl < STDX_MAP_LVL_MAX)
     lvl += 1;
 
   return lvl;
@@ -21,7 +21,7 @@ int simap_new(struct simap* m) {
 
   m->len = 0;
   m->lvl = -1;
-  m->beg.fwd = malloc(sizeof(struct sirec*) * STDX_MAP_MAX_LVL);
+  m->beg.fwd = malloc(sizeof(struct sirec*) * STDX_MAP_LVL_MAX);
 
   if (!m->beg.fwd) {
     errno = ENOMEM;
@@ -37,25 +37,37 @@ int simap_cls(struct simap* m) {
     return -1;
   }
 
+  struct sirec* i = m->beg.fwd[0];
+  struct sirec* j = nullptr;
+
+  while (i) {
+    j = i->fwd[0];
+
+    free(i->fwd);
+    free(i);
+
+    i = j;
+  }
+
   free(m->beg.fwd);
 
   return 0;
 }
 
-int simap_get(struct simap* m, const char* k, int* v) {
+int simap_get(const struct simap* m, str k, int* v) {
   if (!m || !v) {
     errno = EINVAL;
     return -1;
   }
 
-  for (int l = m->lvl; l >= 0; --l) {
-    struct sirec* i = &m->beg;
+  const struct sirec* i = &m->beg;
 
-    while (i->fwd[l] && i->fwd[l]->k < k)
+  for (int l = m->lvl; l >= 0; --l) {
+    while (i->fwd[l] && strcmp(i->fwd[l]->k, k) < 0)
       i = i->fwd[l];
 
-    if (i->fwd[l] && i->fwd[l]->k == k) {
-      *v = i->v;
+    if (i->fwd[l] && strcmp(i->fwd[l]->k, k) == 0) {
+      *v = i->fwd[l]->v;
       return 0;
     }
   }
@@ -64,101 +76,65 @@ int simap_get(struct simap* m, const char* k, int* v) {
   return -1;
 }
 
-int simap_put(struct simap* m, const char* k, int v) {
+int simap_put(struct simap* m, str k, int v) {
   if (!m) {
     errno = EINVAL;
     return -1;
   }
 
-  int lvl = gen_lvl();
-  struct sirec** spl = malloc(sizeof(struct sirec*) * lvl);
+  struct sirec* rec = malloc(sizeof(struct sirec));
+  struct sirec* fwd = nullptr;
 
-  if (!spl) {
+  if (!rec) {
     errno = ENOMEM;
     return -1;
   }
 
-  memset(spl, 0, sizeof(struct sirec*) * lvl);
+  int lvl = gen_lvl();
 
-  for (int l = m->lvl; l >= 0; --l) {
-    if (!i) {
-      continue;
+  rec->k = k;
+  rec->v = v;
+  rec->fwd = malloc(sizeof(struct sirec*) * lvl);
+
+  if (!rec->fwd) {
+    free(rec);
+
+    errno = ENOMEM;
+    return -1;
+  }
+
+  rec->fwd[lvl] = &m->beg;
+
+  for (int l = lvl; l >= 0; --l) {
+    fwd = rec->fwd[l]->fwd[l];
+
+    while (fwd && strcmp(fwd->k, k) < 0) {
+      rec->fwd[l] = fwd;
+      fwd = fwd->fwd[l];
     }
 
-    if (i->k == k) {
-      i->v = v;
-      free(spl);
+    if (fwd && strcmp(fwd->k, k) == 0) {
+      fwd->v = v;
+
+      free(rec->fwd);
+      free(rec);
+
       return 0;
     }
 
-    while (i->fwd[l] && i->fwd[l]->k < i->k)
-      i = i->fwd[l];
-
-    if (!i->fwd[l] || i->fwd[l]->k > i->k) {
-      spl[l] = i;
-      continue;
-    }
-
-    i->fwd[l]->v = v;
-    free(spl);
-    return 0;
+    if (l != 0)
+      rec->fwd[l + 1] = rec->fwd[l];
   }
 
-  if (lvl > m->lvl) {
-    if (m->beg) {
-      struct sirec** n = realloc(m->beg, sizeof(struct sirec*) * lvl);
+  for (int l = lvl; l >= 0; --l) {
+    struct sirec* n = rec->fwd[l]->fwd[l];
 
-      if (!n) {
-        free(spl);
-        errno = ENOMEM;
-        return -1;
-      }
+    rec->fwd[l]->fwd[l] = rec;
+    rec->fwd[l] = n;
+  }
 
-      m->beg = n;
-    } else {
-      m->beg = malloc(sizeof(struct sirec*) * lvl);
-
-      if (!m->beg) {
-        free(spl);
-        errno = ENOMEM;
-        return -1;
-      }
-    }
-
-    memset(m->beg[m->lvl], 0, sizeof(struct sirec*) * (lvl - m->lvl));
-
+  if (lvl > m->lvl)
     m->lvl = lvl;
-  }
 
-  struct sirec* n = malloc(sizeof(struct sirec));
-
-  if (!n) {
-    free(spl);
-    errno = ENOMEM;
-    return -1;
-  }
-
-  n->lvl = lvl;
-  n->k = k;
-  n->v = v;
-  n->fwd = malloc(sizeof(struct sirec*) * lvl);
-
-  if (!n->fwd) {
-    free(n);
-    free(spl);
-
-    errno = ENOMEM;
-    return -1;
-  }
-
-  for (int l = 0; l < lvl; ++l)
-    if (!spl[l]) {
-      n->fwd[l] = nullptr;
-      m->beg[l] = n;
-    } else {
-      n->fwd[l] = spl[l]->fwd[l];
-      spl[l]->fwd[l] = n;
-    }
-
-  return 0;
+  return 1;
 }
