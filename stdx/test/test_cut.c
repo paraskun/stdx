@@ -7,8 +7,8 @@ static MunitResult test_iini(const MunitParameter[], void*) {
 
   munit_assert_int(0, ==, cut_new(&c));
 
-  munit_assert_uint(0, ==, c.len);
-  munit_assert_uint(0, ==, c.cap);
+  munit_assert_int(0, ==, c.len);
+  munit_assert_int(0, ==, c.cap);
 
   munit_assert_int(0, ==, cut_cls(&c));
 
@@ -29,9 +29,7 @@ static MunitResult test_idef(const MunitParameter[], void*) {
   return MUNIT_OK;
 }
 
-int tmp(void*, uint n, ...) {
-  return n;
-}
+int tmp(void*, int n, ...) { return n; }
 
 static MunitResult test_iexp(const MunitParameter[], void*) {
   struct icut c;
@@ -39,8 +37,8 @@ static MunitResult test_iexp(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_exp(&c, 9));
 
-  munit_assert_uint(0, ==, c.len);
-  munit_assert_uint(9, ==, c.cap);
+  munit_assert_int(0, ==, c.len);
+  munit_assert_int(9, ==, c.cap);
 
   munit_assert_int(0, ==, cut_cls(&c));
 
@@ -53,8 +51,8 @@ static MunitResult test_idev(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_dev(&c, 3));
 
-  munit_assert_uint(3, ==, c.len);
-  munit_assert_uint(3, ==, c.cap);
+  munit_assert_int(3, ==, c.len);
+  munit_assert_int(3, ==, c.cap);
 
   munit_assert_int(0, ==, c.dat[0]);
   munit_assert_int(0, ==, c.dat[1]);
@@ -74,8 +72,8 @@ static MunitResult test_iadd(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_add(&c, 2));
   munit_assert_int(0, ==, cut_add(&c, 3));
 
-  munit_assert_uint(3, ==, c.len);
-  munit_assert_uint(6, ==, c.cap);
+  munit_assert_int(3, ==, c.len);
+  munit_assert_int(6, ==, c.cap);
 
   munit_assert_int(1, ==, c.dat[0]);
   munit_assert_int(2, ==, c.dat[1]);
@@ -95,20 +93,20 @@ static MunitResult test_ishr(const MunitParameter[], void*) {
   munit_assert_int(0, ==, cut_new(&c));
   munit_assert_int(0, ==, cut_exp(&c, 9));
 
-  munit_assert_uint(0, ==, c.len);
-  munit_assert_uint(9, ==, c.cap);
+  munit_assert_int(0, ==, c.len);
+  munit_assert_int(9, ==, c.cap);
 
   munit_assert_int(0, ==, cut_add(&c, 1));
   munit_assert_int(0, ==, cut_add(&c, 2));
   munit_assert_int(0, ==, cut_add(&c, 3));
 
-  munit_assert_uint(9, ==, c.cap);
-  munit_assert_uint(3, ==, c.len);
+  munit_assert_int(9, ==, c.cap);
+  munit_assert_int(3, ==, c.len);
 
   munit_assert_int(0, ==, cut_shr(&c));
 
-  munit_assert_uint(3, ==, c.len);
-  munit_assert_uint(3, ==, c.cap);
+  munit_assert_int(3, ==, c.len);
+  munit_assert_int(3, ==, c.cap);
 
   munit_assert_int(0, ==, cut_cls(&c));
 
@@ -189,25 +187,18 @@ static MunitResult test_icov_part(const MunitParameter[], void*) {
 }
 
 static MunitTest itests[] = {
-  {"/ini", test_iini, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/def", test_idef, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/exp", test_iexp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/dev", test_idev, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/add", test_iadd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/shr", test_ishr, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/cov/full", test_icov_full, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/cov/part", test_icov_part, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/ini", test_iini, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},           {"/def", test_idef, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/exp", test_iexp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},           {"/dev", test_idev, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/add", test_iadd, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},           {"/shr", test_ishr, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},           {"/cov/full", test_icov_full, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/cov/part", test_icov_part, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}, {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite suites[] = {
-  {"/icut", itests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
-  {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {"/icut", itests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
 };
 
 static const MunitSuite suite = {"cut", NULL, suites, 1, MUNIT_SUITE_OPTION_NONE};
 
-int main(int argc, char** argv) {
-  return munit_suite_main(&suite, NULL, argc, argv);
-}
+int main(int argc, char** argv) { return munit_suite_main(&suite, NULL, argc, argv); }

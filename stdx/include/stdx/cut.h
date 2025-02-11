@@ -4,8 +4,8 @@
 #include <stdx/cap.h>
 
 struct icut {
-  uint cap;
-  uint len;
+  int cap;
+  int len;
   bool own;
 
   struct icap cmp;
@@ -14,22 +14,22 @@ struct icut {
   int* dat;
 };
 
-int icut_new(struct icut* c, uint n, ...);
+int icut_new(struct icut* c, int n, ...);
 int icut_cls(struct icut* c);
 
-int icut_cov(struct icut* c, int* s, uint len);
-int icut_mov(struct icut* c, int* s, uint len);
+int icut_cov(struct icut* c, int* s, int len);
+int icut_mov(struct icut* c, int* s, int len);
 
 int icut_shr(struct icut* c);
-int icut_exp(struct icut* c, uint cap);
-int icut_dev(struct icut* c, uint len);
+int icut_exp(struct icut* c, int cap);
+int icut_dev(struct icut* c, int len);
 
 int icut_add(struct icut* c, int e);
 int icut_srt(struct icut* c);
 
 struct dcut {
-  uint cap;
-  uint len;
+  int cap;
+  int len;
   bool own;
 
   struct icap cmp;
@@ -38,22 +38,22 @@ struct dcut {
   double* dat;
 };
 
-int dcut_new(struct dcut* c, uint n, ...);
+int dcut_new(struct dcut* c, int n, ...);
 int dcut_cls(struct dcut* c);
 
-int dcut_cov(struct dcut* c, double* s, uint len);
-int dcut_mov(struct dcut* c, double* s, uint len);
+int dcut_cov(struct dcut* c, double* s, int len);
+int dcut_mov(struct dcut* c, double* s, int len);
 
 int dcut_shr(struct dcut* c);
-int dcut_exp(struct dcut* c, uint cap);
-int dcut_dev(struct dcut* c, uint len);
+int dcut_exp(struct dcut* c, int cap);
+int dcut_dev(struct dcut* c, int len);
 
 int dcut_add(struct dcut* c, double e);
 int dcut_srt(struct dcut* c);
 
 struct pcut {
-  uint cap;
-  uint len;
+  int cap;
+  int len;
   bool own;
   bool ctl;
 
@@ -63,15 +63,15 @@ struct pcut {
   void** dat;
 };
 
-int pcut_new(struct pcut* c, uint n, ...);
+int pcut_new(struct pcut* c, int n, ...);
 int pcut_cls(struct pcut* c);
 
-int pcut_cov(struct pcut* c, void** s, uint len);
-int pcut_mov(struct pcut* c, void** s, uint len);
+int pcut_cov(struct pcut* c, void** s, int len);
+int pcut_mov(struct pcut* c, void** s, int len);
 
 int pcut_shr(struct pcut* c);
-int pcut_exp(struct pcut* c, uint cap);
-int pcut_dev(struct pcut* c, uint len);
+int pcut_exp(struct pcut* c, int cap);
+int pcut_dev(struct pcut* c, int len);
 
 int pcut_add(struct pcut* c, void* e);
 int pcut_srt(struct pcut* c);

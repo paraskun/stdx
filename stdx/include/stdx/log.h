@@ -15,7 +15,7 @@ struct irec {
 };
 
 struct ilog {
-  uint len;
+  int len;
   bool srt;
   bool dup;
 
@@ -27,7 +27,7 @@ struct ilog {
   struct irec* itr;
 };
 
-int ilog_new(struct ilog* l, uint n, ...);
+int ilog_new(struct ilog* l, int n, ...);
 int ilog_cls(struct ilog* l);
 
 int ilog_add(struct ilog* l, int e);

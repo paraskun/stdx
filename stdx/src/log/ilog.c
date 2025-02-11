@@ -1,9 +1,9 @@
 #include <errno.h>
-#include <stdlib.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stdx/log.h>
 
-int ilog_new(struct ilog* l, uint n, ...) {
+int ilog_new(struct ilog* l, int n, ...) {
   if (!l) {
     errno = EINVAL;
     return -1;
@@ -24,7 +24,7 @@ int ilog_new(struct ilog* l, uint n, ...) {
   va_list arg;
   va_start(arg, n);
 
-  for (uint i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     ilog_add(l, va_arg(arg, int));
 
   va_end(arg);
@@ -278,7 +278,7 @@ int ilog_dec(struct ilog* l, int* e) {
   return 1;
 }
 
-uint ilog_len(struct ilog* l) {
+int ilog_len(struct ilog* l) {
   if (!l) {
     errno = EINVAL;
     return -1;

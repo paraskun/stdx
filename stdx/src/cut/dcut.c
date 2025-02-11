@@ -5,7 +5,7 @@
 #include <stdx/pque.h>
 #include <string.h>
 
-int dcut_new(struct dcut* c, uint n, ...) {
+int dcut_new(struct dcut* c, int n, ...) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -28,7 +28,7 @@ int dcut_new(struct dcut* c, uint n, ...) {
   va_list arg;
   va_start(arg, n);
 
-  for (uint i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     dcut_add(c, va_arg(arg, double));
 
   va_end(arg);
@@ -49,7 +49,7 @@ int dcut_cls(struct dcut* c) {
   return 0;
 }
 
-int dcut_cov(struct dcut* c, double* s, uint len) {
+int dcut_cov(struct dcut* c, double* s, int len) {
   if (!c || !s || len == 0) {
     errno = EINVAL;
     return -1;
@@ -66,7 +66,7 @@ int dcut_cov(struct dcut* c, double* s, uint len) {
   return 0;
 }
 
-int dcut_mov(struct dcut* c, double* s, uint len) {
+int dcut_mov(struct dcut* c, double* s, int len) {
   if (!c || !s) {
     errno = EINVAL;
     return -1;
@@ -116,7 +116,7 @@ int dcut_shr(struct dcut* c) {
   return 0;
 }
 
-int dcut_exp(struct dcut* c, uint cap) {
+int dcut_exp(struct dcut* c, int cap) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -157,7 +157,7 @@ int dcut_exp(struct dcut* c, uint cap) {
   return 0;
 }
 
-int dcut_dev(struct dcut* c, uint len) {
+int dcut_dev(struct dcut* c, int len) {
   if (!c) {
     errno = EINVAL;
     return -1;

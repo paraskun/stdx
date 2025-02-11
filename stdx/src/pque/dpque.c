@@ -3,20 +3,20 @@
 
 #include "pque.h"
 
-static inline void swap(struct dcut* c, uint a, uint b) {
+static inline void swap(struct dcut* c, int a, int b) {
   double t = c->dat[a];
 
   c->dat[a] = c->dat[b];
   c->dat[b] = t;
 }
 
-int dpque_fixu(struct dcut* q, uint i) {
+int dpque_fixu(struct dcut* q, int i) {
   if (!q) {
     errno = EINVAL;
     return -1;
   }
 
-  uint p = PQUE_P(i);
+  int p = PQUE_P(i);
 
   while (i > 0 && q->cmp.call(q->cmp.ctx, 2, q->dat[i], q->dat[p]) == -1) {
     swap(q, p, i);
@@ -28,7 +28,7 @@ int dpque_fixu(struct dcut* q, uint i) {
   return 0;
 }
 
-int dpque_fixd(struct dcut* q, uint i) {
+int dpque_fixd(struct dcut* q, int i) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -39,9 +39,9 @@ int dpque_fixd(struct dcut* q, uint i) {
     return -1;
   }
 
-  uint l = PQUE_L(i);
-  uint r = PQUE_R(i);
-  uint m;
+  int l = PQUE_L(i);
+  int r = PQUE_R(i);
+  int m;
 
   if (l < q->len && q->cmp.call(q->cmp.ctx, 2, q->dat[l], q->dat[i]) == -1)
     m = l;
@@ -66,7 +66,7 @@ int dpque_fix(struct dcut* q) {
     return -1;
   }
 
-  for (uint i = q->len / 2 - 1;; --i) {
+  for (int i = q->len / 2 - 1;; --i) {
     if (dpque_fixd(q, i))
       return -1;
 
@@ -119,9 +119,9 @@ int dpque_srt(struct dcut* q) {
   if (q->len == 0)
     return 0;
 
-  uint len = q->len;
+  int len = q->len;
 
-  for (uint i = q->len - 1; i > 0; --i) {
+  for (int i = q->len - 1; i > 0; --i) {
     swap(q, 0, i);
     q->len -= 1;
     dpque_fixd(q, 0);

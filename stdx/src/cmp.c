@@ -11,7 +11,7 @@
   if (a < b) return -1; \
   return 0
 
-int iasc(void*, uint n, ...) {
+int iasc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
@@ -26,7 +26,7 @@ int iasc(void*, uint n, ...) {
   ASC(a, b);
 }
 
-int idsc(void*, uint n, ...) {
+int idsc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
@@ -41,37 +41,37 @@ int idsc(void*, uint n, ...) {
   DSC(a, b);
 }
 
-int uasc(void*, uint n, ...) {
+int uasc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
   va_list arg;
   va_start(arg, n);
 
-  uint a = va_arg(arg, uint);
-  uint b = va_arg(arg, uint);
+  int a = va_arg(arg, int);
+  int b = va_arg(arg, int);
 
   va_end(arg);
 
   ASC(a, b);
 }
 
-int udsc(void*, uint n, ...) {
+int udsc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
   va_list arg;
   va_start(arg, n);
 
-  uint a = va_arg(arg, uint);
-  uint b = va_arg(arg, uint);
+  int a = va_arg(arg, int);
+  int b = va_arg(arg, int);
 
   va_end(arg);
 
   DSC(a, b);
 }
 
-int dasc(void*, uint n, ...) {
+int dasc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
@@ -86,7 +86,7 @@ int dasc(void*, uint n, ...) {
   ASC(a, b);
 }
 
-int ddsc(void*, uint n, ...) {
+int ddsc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
@@ -101,7 +101,7 @@ int ddsc(void*, uint n, ...) {
   DSC(a, b);
 }
 
-int pasc(void*, uint n, ...) {
+int pasc(void*, int n, ...) {
   if (n < 2)
     return 0;
 
@@ -116,7 +116,7 @@ int pasc(void*, uint n, ...) {
   ASC(a, b);
 }
 
-int pdsc(void*, uint n, ...) {
+int pdsc(void*, int n, ...) {
   if (n < 2)
     return 0;
 

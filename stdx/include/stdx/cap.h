@@ -1,41 +1,40 @@
 #ifndef STDX_CAP_H
 #define STDX_CAP_H
 
-typedef unsigned int uint;
 typedef const char* str;
 
 struct vcap {
-  void (*call)(void*, uint, ...);
+  void (*call)(void*, int, ...);
   void* ctx;
 };
 
 struct icap {
-  int (*call)(void*, uint, ...);
+  int (*call)(void*, int, ...);
   void* ctx;
 };
 
 struct ucap {
-  uint (*call)(void*, uint, ...);
+  int (*call)(void*, int, ...);
   void* ctx;
 };
 
 struct dcap {
-  double (*call)(void*, uint, ...);
+  double (*call)(void*, int, ...);
   void* ctx;
 };
 
 #define cap(X, c) {.call = X, .ctx = (void*)c}
 
-int iasc(void*, uint, ...);
-int idsc(void*, uint, ...);
+int iasc(void*, int, ...);
+int idsc(void*, int, ...);
 
-int uasc(void*, uint, ...);
-int udsc(void*, uint, ...);
+int uasc(void*, int, ...);
+int udsc(void*, int, ...);
 
-int dasc(void*, uint, ...);
-int ddsc(void*, uint, ...);
+int dasc(void*, int, ...);
+int ddsc(void*, int, ...);
 
-int pasc(void*, uint, ...);
-int pdsc(void*, uint, ...);
+int pasc(void*, int, ...);
+int pdsc(void*, int, ...);
 
 #endif  // STDX_CAP_H

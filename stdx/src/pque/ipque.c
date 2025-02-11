@@ -3,20 +3,20 @@
 
 #include "pque.h"
 
-static inline void swap(struct icut* c, uint a, uint b) {
+static inline void swap(struct icut* c, int a, int b) {
   int t = c->dat[a];
 
   c->dat[a] = c->dat[b];
   c->dat[b] = t;
 }
 
-int ipque_fixu(struct icut* q, uint i) {
+int ipque_fixu(struct icut* q, int i) {
   if (!q) {
     errno = EINVAL;
     return -1;
   }
 
-  uint p = PQUE_P(i);
+  int p = PQUE_P(i);
 
   while (i > 0 && q->cmp.call(q->cmp.ctx, 2, q->dat[i], q->dat[p]) == -1) {
     swap(q, p, i);
@@ -28,7 +28,7 @@ int ipque_fixu(struct icut* q, uint i) {
   return 0;
 }
 
-int ipque_fixd(struct icut* q, uint i) {
+int ipque_fixd(struct icut* q, int i) {
   if (!q) {
     errno = EINVAL;
     return -1;
@@ -39,9 +39,9 @@ int ipque_fixd(struct icut* q, uint i) {
     return -1;
   }
 
-  uint l = PQUE_L(i);
-  uint r = PQUE_R(i);
-  uint m;
+  int l = PQUE_L(i);
+  int r = PQUE_R(i);
+  int m;
 
   if (l < q->len && q->cmp.call(q->cmp.ctx, 2, q->dat[l], q->dat[i]) == -1)
     m = l;
@@ -66,7 +66,7 @@ int ipque_fix(struct icut* q) {
     return -1;
   }
 
-  for (uint i = q->len / 2 - 1;; --i) {
+  for (int i = q->len / 2 - 1;; --i) {
     if (ipque_fixd(q, i))
       return -1;
 
@@ -119,9 +119,9 @@ int ipque_srt(struct icut* q) {
   if (q->len == 0)
     return 0;
 
-  uint len = q->len;
+  int len = q->len;
 
-  for (uint i = q->len - 1; i > 0; --i) {
+  for (int i = q->len - 1; i > 0; --i) {
     swap(q, 0, i);
     q->len -= 1;
     ipque_fixd(q, 0);

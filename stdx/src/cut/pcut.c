@@ -5,7 +5,7 @@
 #include <stdx/pque.h>
 #include <string.h>
 
-int pcut_new(struct pcut* c, uint n, ...) {
+int pcut_new(struct pcut* c, int n, ...) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -29,7 +29,7 @@ int pcut_new(struct pcut* c, uint n, ...) {
   va_list arg;
   va_start(arg, n);
 
-  for (uint i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     pcut_add(c, va_arg(arg, void*));
 
   va_end(arg);
@@ -45,7 +45,7 @@ int pcut_cls(struct pcut* c) {
 
   if (c->dat) {
     if (c->ctl)
-      for (uint i = 0; i < c->len; ++i)
+      for (int i = 0; i < c->len; ++i)
         free(c->dat[i]);
 
     if (c->own)
@@ -55,7 +55,7 @@ int pcut_cls(struct pcut* c) {
   return 0;
 }
 
-int pcut_cov(struct pcut* c, void** s, uint len) {
+int pcut_cov(struct pcut* c, void** s, int len) {
   if (!c || !s || len == 0) {
     errno = EINVAL;
     return -1;
@@ -72,7 +72,7 @@ int pcut_cov(struct pcut* c, void** s, uint len) {
   return 0;
 }
 
-int pcut_mov(struct pcut* c, void** s, uint len) {
+int pcut_mov(struct pcut* c, void** s, int len) {
   if (!c || !s) {
     errno = EINVAL;
     return -1;
@@ -80,7 +80,7 @@ int pcut_mov(struct pcut* c, void** s, uint len) {
 
   if (c->dat) {
     if (c->ctl)
-      for (uint i = 0; i < c->len; ++i)
+      for (int i = 0; i < c->len; ++i)
         free(c->dat[i]);
 
     if (c->own)
@@ -127,7 +127,7 @@ int pcut_shr(struct pcut* c) {
   return 0;
 }
 
-int pcut_exp(struct pcut* c, uint cap) {
+int pcut_exp(struct pcut* c, int cap) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -168,7 +168,7 @@ int pcut_exp(struct pcut* c, uint cap) {
   return 0;
 }
 
-int pcut_dev(struct pcut* c, uint len) {
+int pcut_dev(struct pcut* c, int len) {
   if (!c) {
     errno = EINVAL;
     return -1;

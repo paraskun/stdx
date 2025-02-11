@@ -1,0 +1,8 @@
+{
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "C_Cpp.default.defines": [
+        "true=1",
+        "false=0",
+        "nullptr=NULL"
+    ]
+}

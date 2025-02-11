@@ -1,7 +1,6 @@
 #include <munit.h>
-#include <string.h>
-
 #include <stdx/map.h>
+#include <string.h>
 
 static MunitResult test_siput(const MunitParameter[], void*) {
   struct simap m;
@@ -18,17 +17,15 @@ static MunitResult test_siput(const MunitParameter[], void*) {
 }
 
 static MunitTest sitests[] = {
-  {"/put", test_siput, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/put", test_siput, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite suites[] = {
-  {"/simap", sitests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
-  {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {"/simap", sitests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
 };
 
 static const MunitSuite suite = {"map", NULL, suites, 1, MUNIT_SUITE_OPTION_NONE};
 
-int main(int argc, char** argv) {
-  return munit_suite_main(&suite, NULL, argc, argv);
-}
+int main(int argc, char** argv) { return munit_suite_main(&suite, NULL, argc, argv); }

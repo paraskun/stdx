@@ -58,18 +58,16 @@ static MunitResult test_isrt(const MunitParameter[], void*) {
 }
 
 static MunitTest itests[] = {
-  {"/fix", test_ifix, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-  {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/fix", test_ifix, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/srt", test_isrt, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite suites[] = {
-  {"/ipque", itests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
-  {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {"/ipque", itests, NULL, 1, MUNIT_SUITE_OPTION_NONE},
+    {NULL, NULL, NULL, 1, MUNIT_SUITE_OPTION_NONE},
 };
 
 static const MunitSuite suite = {"pque", NULL, suites, 1, MUNIT_SUITE_OPTION_NONE};
 
-int main(int argc, char** argv) {
-  return munit_suite_main(&suite, NULL, argc, argv);
-}
+int main(int argc, char** argv) { return munit_suite_main(&suite, NULL, argc, argv); }

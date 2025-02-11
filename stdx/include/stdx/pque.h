@@ -3,26 +3,24 @@
 
 #include <stdx/cut.h>
 
-int ipque_fixu(struct icut* q, uint i);
-int ipque_fixd(struct icut* q, uint i);
+int ipque_fixu(struct icut* q, int i);
+int ipque_fixd(struct icut* q, int i);
 
 int ipque_fix(struct icut* q);
 int ipque_add(struct icut* q, int e);
 int ipque_ext(struct icut* q, int* e);
 int ipque_srt(struct icut* q);
 
-
-int dpque_fixu(struct dcut* q, uint i);
-int dpque_fixd(struct dcut* q, uint i);
+int dpque_fixu(struct dcut* q, int i);
+int dpque_fixd(struct dcut* q, int i);
 
 int dpque_fix(struct dcut* q);
 int dpque_add(struct dcut* q, double e);
 int dpque_ext(struct dcut* q, double* e);
 int dpque_srt(struct dcut* q);
 
-
-int ppque_fixu(struct pcut* q, uint i);
-int ppque_fixd(struct pcut* q, uint i);
+int ppque_fixu(struct pcut* q, int i);
+int ppque_fixd(struct pcut* q, int i);
 
 int ppque_fix(struct pcut* q);
 int ppque_add(struct pcut* q, void* e);

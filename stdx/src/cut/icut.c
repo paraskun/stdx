@@ -5,7 +5,7 @@
 #include <stdx/pque.h>
 #include <string.h>
 
-int icut_new(struct icut* c, uint n, ...) {
+int icut_new(struct icut* c, int n, ...) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -28,7 +28,7 @@ int icut_new(struct icut* c, uint n, ...) {
   va_list arg;
   va_start(arg, n);
 
-  for (uint i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     icut_add(c, va_arg(arg, int));
 
   va_end(arg);
@@ -48,7 +48,7 @@ int icut_cls(struct icut* c) {
   return 0;
 }
 
-int icut_cov(struct icut* c, int* s, uint len) {
+int icut_cov(struct icut* c, int* s, int len) {
   if (!c || !s || len == 0) {
     errno = EINVAL;
     return -1;
@@ -65,7 +65,7 @@ int icut_cov(struct icut* c, int* s, uint len) {
   return 0;
 }
 
-int icut_mov(struct icut* c, int* s, uint len) {
+int icut_mov(struct icut* c, int* s, int len) {
   if (!c || !s) {
     errno = EINVAL;
     return -1;
@@ -114,7 +114,7 @@ int icut_shr(struct icut* c) {
   return 0;
 }
 
-int icut_exp(struct icut* c, uint cap) {
+int icut_exp(struct icut* c, int cap) {
   if (!c) {
     errno = EINVAL;
     return -1;
@@ -155,7 +155,7 @@ int icut_exp(struct icut* c, uint cap) {
   return 0;
 }
 
-int icut_dev(struct icut* c, uint len) {
+int icut_dev(struct icut* c, int len) {
   if (!c) {
     errno = EINVAL;
     return -1;
